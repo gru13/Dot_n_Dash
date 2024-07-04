@@ -1,0 +1,7 @@
+https://www.geeksforgeeks.org/how-to-create-a-command-line-progress-bar-in-c-c/
+
+https://www.bbc.co.uk/bitesize/guides/zscvxfr/revision/4 -> Extened ascii 
+
+https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes -> VKS
+
+https://stackoverflow.com/questions/9301211/how-do-i-install-pdcurses-in-windows-for-use-with-c -> install of pdcurses
