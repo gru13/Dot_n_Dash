@@ -3,5 +3,8 @@
 
 int main() {
     Game* g = initGame();
+    REFRESH;
+    sleep(5);
+    delwin(g->win);
     return 0;
 }

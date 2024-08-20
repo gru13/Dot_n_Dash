@@ -1,6 +1,13 @@
 {
     "files.associations": {
-        "string": "cpp",
-        "inbulit_types.h": "c"
+        "string": "c",
+        "inbulit_types.h": "c",
+        "stdarg.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "windows.h": "c",
+        "curses.h": "c",
+        "ncurses.h": "c"
     }
 }
