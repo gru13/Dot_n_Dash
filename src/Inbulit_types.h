@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<stdarg.h>
 #include<string.h>
-
+#include<pthread.h>
 
 extern char CharBuffer[101];
 
@@ -10,17 +10,17 @@ extern char CharBuffer[101];
 #define SPC 32	 // ' '
 #define DASH 35 // #
 #define DOT 79	 // O
-#define VER_LINE '|' // ║
-#define HOR_LINE '-' // ═
+#define VER_LINE (int)'|' // ║
+#define HOR_LINE (int)'-' // ═
 
 // #define DASH 219 // █
 // #define BALL 254	 // ■
 // #define DOT 254	 // ■
 // #define DASH  220 // ▄
 
-// #define HOR_LINE 205 // ═
 // #define BLOK 219 // █
 // #define VER_LINE 186 // ║
+// #define HOR_LINE 205 // ═
 // #define TL_COR 201	 // ╔
 // #define BL_COR 200	 // ╚
 // #define TR_COR 187	 // ╗
@@ -35,6 +35,7 @@ extern char CharBuffer[101];
 #define MV_DWN 'D'
 #define CONT 'c'
 #define CLOSE 'x'
+#define ESC 27
 #define OK 0
 #define ERRO 1
 
@@ -43,39 +44,38 @@ extern char CharBuffer[101];
     #include<ncurses.h>
     #include<unistd.h>
 #elif defined(_WIN32)
-    #define sleep(time) Sleep((DWORD)(time)*1000);
+    #define sleep(time) Sleep((DWORD)(time));
     #define CLEARSCRN "cls"
     #include<windows.h>
     #include<curses.h>
 #endif
 
+//  Init the mutex variable
+pthread_mutex_t mutex;
+int choice;
 
 #define REFRESH wrefresh(g->win);
 
 #define print(str) \
     wprintw((WINDOW*)g->win,"%c",(char)str);
-#define pprint(Loc, str) \
-    mvwprintw(g->win, (int)Location.(y), (int)Location.(x), "%c", (char)(str))
-#define piprint(y,x, str) \
+#define pprint(y,x, str) \
     mvwprintw(g->win, (int)y, (int)x, "%c", (char)(str))
-
-typedef struct Point_Struct{
-    int x;
-    int y;
-} Point;
 
 
 typedef struct Dash_Struct{
-    Point Location;
+    int x;
+    int y;
     unsigned short Size;
 } Dash;
 
 typedef struct Dot_Struct{
-    Point Location;
+    int x;
+    int y;
 } Dot;
 
 typedef struct Game{
     WINDOW* win;
+    pthread_t DashMover_thread;
     Dash* dash;
     Dot* dot;
     unsigned short WinY; // max heigth of current Display
@@ -99,6 +99,7 @@ int initDisplay(Game* g);
 
 */
 int initDash(Game* g);
+void* DashMover(void* game);
 
 
 

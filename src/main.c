@@ -4,7 +4,9 @@
 int main() {
     Game* g = initGame();
     REFRESH;
-    sleep(5);
-    delwin(g->win);
+    pthread_join(g->DashMover_thread,NULL);
+    // sleep(5);
+    end:
+        delwin(g->win);
     return 0;
 }

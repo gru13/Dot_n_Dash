@@ -10,3 +10,23 @@ Day 0:
             - Create the interface  
             - Connected every file  
             - Basic Layout  
+
+Day 1:
+    time     : 1hr50m -> (1310 - 1510)(200824)  
+    Aim      : Init everything  
+    Done     : YES
+    NewLearn : do static shit in static dont go overboard make it dynamic  
+    Note     :left extend ascii for now i will get to it in later  
+    Record   :  
+            - Init created  
+            - removed Point to reduce thee complexity
+
+Day 1.1:
+    time     : 40m -> (2300 - 2340)(200824)  
+    Aim      : impletemented the dash mover with pthread  
+    Done     : YES
+    NewLearn : pthread mutex variable existense  
+    Note     : basic version of dash mover  
+    Record   :  
+            - dash mover pthread created  
+            - idk how to combain with ball movement and idk it will work or not

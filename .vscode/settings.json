@@ -8,6 +8,7 @@
         "stdio.h": "c",
         "windows.h": "c",
         "curses.h": "c",
-        "ncurses.h": "c"
+        "ncurses.h": "c",
+        "pthread.h": "c"
     }
 }

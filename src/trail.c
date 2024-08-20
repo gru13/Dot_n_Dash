@@ -1,18 +1,17 @@
-#include <ncurses.h>
+#include <curses.h>
 
 int main() {
-    initscr();  // Start curses mode
+    initscr();          // Start ncurses mode
+    raw();              // Disable line buffering
+    keypad(stdscr, TRUE); // Enable special keys
+    noecho();           // Don't echo input
+
     printw("Box Drawing:\n");
+    printw("\u2551\n"); // Unicode character for vertical line ║
 
-    mvaddch(1, 0, ACS_VLINE);      // Draw │
-    mvaddch(1, 2, ACS_HLINE);      // Draw ─
-    mvaddch(2, 0, ACS_ULCORNER);   // Draw ┌
-    mvaddch(2, 2, ACS_URCORNER);   // Draw ┐
-    mvaddch(3, 0, ACS_LLCORNER);   // Draw └
-    mvaddch(3, 2, ACS_LRCORNER);   // Draw ┘
+    refresh();          // Print to the screen
+    getch();            // Wait for user input
+    endwin();           // End ncurses mode
 
-    refresh();  // Print it on the real screen
-    getch();    // Wait for user input
-    endwin();   // End curses mode
     return 0;
 }
