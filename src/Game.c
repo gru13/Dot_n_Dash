@@ -13,8 +13,6 @@ Game* initGame(){
     nodelay(g->win, TRUE);
     keypad(g->win, TRUE);
 
-
-
     REFRESH;
     return g;
 }

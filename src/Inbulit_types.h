@@ -4,8 +4,9 @@
 #include<string.h>
 #include<pthread.h>
 
-extern char CharBuffer[101];
-
+#define INITIAL_CAPACITY 100
+#define INCREMENT 20
+extern char CharBuffer[INITIAL_CAPACITY];
 // #define REFRESH_RATE 4000 // this in milli-second
 #define SPC 32	 // ' '
 #define DASH 35 // #
@@ -61,6 +62,19 @@ int choice;
 #define pprint(y,x, str) \
     mvwprintw(g->win, (int)y, (int)x, "%c", (char)(str))
 
+typedef struct {
+    int *items;
+    int top;
+    int capacity;
+} Stack;
+typedef struct {
+    int *items;
+    int front;
+    int rear;
+    int size;
+    int capacity;
+} Queue;
+
 
 typedef struct Dash_Struct{
     int x;
@@ -71,11 +85,14 @@ typedef struct Dash_Struct{
 typedef struct Dot_Struct{
     int x;
     int y;
+    Queue* nxtX;
+    Queue* nxtY;
 } Dot;
 
 typedef struct Game{
     WINDOW* win;
     pthread_t DashMover_thread;
+    pthread_t BallMover_thread;
     Dash* dash;
     Dot* dot;
     unsigned short WinY; // max heigth of current Display
@@ -107,3 +124,34 @@ void* DashMover(void* game);
         Dot.    
 */
 int initDot(Game* g);
+void* BallMover(void* game);
+
+
+/*  
+    dataStructures.c
+
+    Data Structures:
+        Stack
+*/
+
+// Stack part
+void StackInit(Stack *s); 
+int StackisFull(Stack *s); 
+int StackisEmpty(Stack *s); 
+void StackResize(Stack *s, int new_capacity); 
+void StackPush(Stack *s, int value); 
+int StackPop(Stack *s); 
+int StactPeek(Stack *s); 
+void Stackfree(Stack *s); 
+void StackPrint(Stack *s); 
+// Queue part
+void QueueInit(Queue *q);
+int QueueIsFull(Queue *q);
+int QueueIsEmpty(Queue *q);
+void QueueResize(Queue *q, int new_capacity);
+void QueueEnqueue(Queue *q, int value);
+int QueueDequeue(Queue *q);
+int QueueFront(Queue *q);
+int QueueRear(Queue *q);
+void QueueFree(Queue *q);
+void QueuePrint(Queue *q);

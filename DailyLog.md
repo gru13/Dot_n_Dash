@@ -30,3 +30,13 @@ Day 1.1:
     Record   :  
             - dash mover pthread created  
             - idk how to combain with ball movement and idk it will work or not
+
+Day 2:
+    time     : 1hr31m -> (1605 - 1658)(1815 - 1843)(210824)  
+    Aim      : Try to move the ball  
+    Done     : YES
+    NewLearn : mutex lock and unlock positon   
+    Note     :  leaves out trail
+    Record   :  
+            -  
+            -  
