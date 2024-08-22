@@ -11,18 +11,18 @@ int initDash(Game* g){
         pprint(y,i,DASH);
     }
 
-    // pthread_create(&g->DashMover_thread, NULL, DashMover, (void*)g);
+    pthread_create(&g->DashMover_thread, NULL, DashMover, (void*)g);
 
     return OK;
-}
+}   
 
 
 void* DashMover(void* game){
     Game* g = (Game*)game;
     while(TRUE){
-        pprint(0,0,CONT);REFRESH;
         choice = wgetch(g->win);
         pthread_mutex_lock(&mutex);
+        pprint(0,0,CONT);
         switch (choice){
             case ERR:
                 goto ContNextLoopDashMover;
@@ -53,10 +53,13 @@ void* DashMover(void* game){
                 break;
         }
         ContNextLoopDashMover:
-            REFRESH;
+            // REFRESH;
             pthread_mutex_unlock(&mutex);
-            sleep(1);    
+            // sleep(1);    
+            // sleep(200);
+
     }
     endLOOPDashMover:
     return NULL;
 }
+

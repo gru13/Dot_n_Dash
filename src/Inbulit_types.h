@@ -93,6 +93,7 @@ typedef struct Game{
     WINDOW* win;
     pthread_t DashMover_thread;
     pthread_t BallMover_thread;
+    pthread_t refresh_Thread;
     Dash* dash;
     Dot* dot;
     unsigned short WinY; // max heigth of current Display
@@ -108,7 +109,7 @@ contains
 */
 Game* initGame();
 int initDisplay(Game* g);
-
+void* refreshThread(void* game);
 
 
 /*

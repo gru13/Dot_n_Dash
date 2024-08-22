@@ -38,5 +38,11 @@ Day 2:
     NewLearn : mutex lock and unlock positon   
     Note     :  leaves out trail
     Record   :  
-            -  
-            -  
+
+Day 2.1:
+    time     : 13m (0030 - 0043)(230824)
+    Aim      : remove the trail
+    Done     : Yes
+    Newlearn : look the mutex locking , refersh thread
+    Note     : BEawre when using mutexlock 
+    Record   : New thread intro for controlling the refersh

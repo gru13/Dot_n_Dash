@@ -5,15 +5,13 @@ Game* initGame(){
     Game* g = (Game*)malloc(sizeof(Game));
     mutex = PTHREAD_MUTEX_INITIALIZER;
     initDisplay(g);
+    pthread_create(&g->refresh_Thread,NULL,refreshThread,(void*)g);
     initDash(g);
     initDot(g);
-    REFRESH;
     curs_set(FALSE);//setting cursor hidden
     noecho();
     nodelay(g->win, TRUE);
     keypad(g->win, TRUE);
-
-    REFRESH;
     return g;
 }
 
@@ -34,16 +32,13 @@ int initDisplay(Game* g){
     return OK;
 }
 
-
-void* StartGame(void* game){
+void* refreshThread(void* game){
     Game* g = (Game*)game;
     while(TRUE){
-        if(choice == CLOSE){
-            break;
-        }
-        
+        pthread_mutex_lock(&mutex);
+        REFRESH;
+        pthread_mutex_unlock(&mutex);
+        sleep(200);
     }
-    return OK;
 }
-
 

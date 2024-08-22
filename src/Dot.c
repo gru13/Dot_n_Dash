@@ -29,9 +29,11 @@ void* BallMover(void* game){
             g->dot->x--;
         }
         pprint(g->dot->y,g->dot->x,DOT);
-        REFRESH
+        // REFRESH
         pthread_mutex_unlock(&mutex);
-        sleep(250);
+        // sleep(250);
+        sleep(200);
+
     }
     return NULL;
 }
