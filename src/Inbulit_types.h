@@ -111,7 +111,6 @@ Game* initGame();
 int initDisplay(Game* g);
 void* refreshThread(void* game);
 
-
 /*
         Dash.c 
 
@@ -126,6 +125,7 @@ void* DashMover(void* game);
 */
 int initDot(Game* g);
 void* BallMover(void* game);
+int inDotArea(Game* g, int x, int y);
 
 
 /*  
@@ -133,6 +133,7 @@ void* BallMover(void* game);
 
     Data Structures:
         Stack
+        Queue
 */
 
 // Stack part

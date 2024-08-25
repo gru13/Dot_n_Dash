@@ -93,22 +93,24 @@ void StackPrint(Stack *s) {
 
 // Queue Implementation
 
-// Function to initialize the queue
-void QueueInit(Queue *q) {
-    q->capacity = INITIAL_CAPACITY;
-    q->front = 0;
-    q->size = 0;
-    q->rear = q->capacity - 1;
-    q->items = (int *)malloc(q->capacity * sizeof(int));
-    if (!q->items) {
+// Function to resize the queue
+void QueueResize(Queue *q, int new_capacity) {
+    int *new_items = (int *)malloc(sizeof(int) * new_capacity);
+    if (!new_items) {
         printf("Memory allocation failed\n");
         exit(EXIT_FAILURE);
     }
-}
 
-// Function to check if the queue is full
-int QueueIsFull(Queue *q) {
-    return q->size == q->capacity;
+    for (int i = 0; i < q->size; i++) {
+        new_items[i] = q->items[(q->front + i) % q->capacity];
+    }
+
+    free(q->items);
+
+    q->items = new_items;
+    q->capacity = new_capacity;
+    q->front = 0;
+    q->rear = q->size - 1;
 }
 
 // Function to check if the queue is empty
@@ -116,30 +118,16 @@ int QueueIsEmpty(Queue *q) {
     return q->size == 0;
 }
 
-// Function to resize the queue
-void QueueResize(Queue *q, int new_capacity) {
-    int *new_items = (int *)malloc(new_capacity * sizeof(int));
-    if (!new_items) {
-        printf("Memory allocation failed\n");
-        exit(EXIT_FAILURE);
-    }
-
-    // Copy elements to the new array
-    for (int i = 0; i < q->size; i++) {
-        new_items[i] = q->items[(q->front + i) % q->capacity];
-    }
-
-    free(q->items);
-    q->items = new_items;
-    q->capacity = new_capacity;
-    q->front = 0;
-    q->rear = q->size - 1;
+// Function to check if the queue is full
+int QueueIsFull(Queue *q) {
+    return q->size == q->capacity;
 }
 
 // Function to enqueue an element to the queue
 void QueueEnqueue(Queue *q, int value) {
     if (QueueIsFull(q)) {
-        QueueResize(q, q->capacity + INCREMENT);
+        // QueueResize(q, q->capacity + INCREMENT);
+        return;
     }
     q->rear = (q->rear + 1) % q->capacity;
     q->items[q->rear] = value;
@@ -156,7 +144,6 @@ int QueueDequeue(Queue *q) {
     q->front = (q->front + 1) % q->capacity;
     q->size--;
 
-    // If the current size drops below capacity minus 20, and capacity is above the initial, decrease capacity by 20
     if (q->capacity > INITIAL_CAPACITY && q->size < q->capacity - INCREMENT) {
         int new_capacity = q->capacity - INCREMENT;
         if (new_capacity < INITIAL_CAPACITY) {
@@ -164,8 +151,25 @@ int QueueDequeue(Queue *q) {
         }
         QueueResize(q, new_capacity);
     }
+    if(q->size == 0){
+        q->front = 0;
+        q->rear = -1;
+    }
 
     return dequeued_value;
+}
+
+// Function to initialize the queue
+void QueueInit(Queue *q) {
+    q->items = (int *)malloc(sizeof(int) * INITIAL_CAPACITY);
+    if (!q->items) {
+        printf("Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    q->capacity = INITIAL_CAPACITY;
+    q->size = 0;
+    q->front = 0;
+    q->rear = -1;
 }
 
 // Function to get the front element of the queue
