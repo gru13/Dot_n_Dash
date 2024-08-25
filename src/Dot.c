@@ -1,8 +1,11 @@
 #include<./Inbulit_types.h>
-int direction = -1;
+
+int directionX = -1;
+int directionY = -1;
+double angle = 90;
 int initDot(Game* g){
     g->dot = (Dot*)malloc(sizeof(Dot));
-    g->dot->x = g->WinX/2 - 0;
+    g->dot->x = g->WinX/2;
     g->dot->y = g->WinY - 3;
     g->dot->nxtX = (Queue*)malloc(sizeof(Queue));
     g->dot->nxtY = (Queue*)malloc(sizeof(Queue));
@@ -23,35 +26,86 @@ void* BallMover(void* game){
             break;
         }
         pthread_mutex_lock(&mutex);
-            pprint(g->dot->y,g->dot->x,SPC);
+        pprint(g->dot->y,g->dot->x,SPC);
         if(QueueIsEmpty(g->dot->nxtY) || QueueIsEmpty(g->dot->nxtX)){
-            if(g->dot->x == g->WinX/2){
-                if(g->dot->y == g->dash->y - 1){
-                    direction = -1;
-                }else {
-                    direction = 1;
+            // if the ball in last layer above the dash layer
+            if(g->dot->y == g->dash->y - 1){
+                directionY = -1;
+                if(g->dot->x == g->dash->x){
+                    angle = 90.0; 
+                }else{
+                    int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
+                    angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / PI
+                    if(angle*180/PI > 90){
+                        directionX = -1;
+                    }else if(angle*180/PI < 90){
+                        directionX = +1;
+                    }
                 }
-                while(TRUE){
-                   int newX, newY;
-                   if(QueueIsEmpty(g->dot->nxtX)){
-                        newX = g->dot->x;
-                   }else{
-                        newX = QueueRear(g->dot->nxtX);
-                   }
-                   if(QueueIsEmpty(g->dot->nxtY)){
-                        newY = g->dot->y;
-                   }else{
-                        newY = QueueRear(g->dot->nxtY) + direction;
-                   }
-                   if(inDotArea(g,newX,newY)){
-                        QueueEnqueue(g->dot->nxtX,newX);
-                        QueueEnqueue(g->dot->nxtY,newY);
-                   }else{
-                        break;
-                   }
-                }
-                
             }
+            // if in topest layer
+            else if(g->dot->y == 1){
+                directionY = 1;
+                if(g->dot->x == g->WinX/2){
+                    angle = 90.0; 
+                }else{
+                    int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
+                    angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / M_PI
+                    if(angle*180/PI > 90){
+                        directionX = +1;
+                    }else if(angle*180/PI < 90){
+                        directionX = -1;
+                    }
+                }
+            }
+            //  left
+            else if(g->dot->x == 1){
+                directionX = 1;
+                if(g->dot->y == g->WinY/2){
+                    angle = 90.0; 
+                }else{
+                    int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
+                    angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / M_PI
+                    if(angle*180/PI > 90){
+                        directionY= +1;
+                    }else if(angle*180/PI < 90){
+                        directionY = -1;
+                    }
+                }
+            }
+            //  rigth
+            else if(g->dot->x == 1){
+                directionX = -1;
+                if(g->dot->y == g->WinY/2){
+                    angle = 90.0; 
+                }else{
+                    int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
+                    angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / M_PI
+                    if(angle*180/PI > 90){
+                        directionY= +1;
+                    }else if(angle*180/PI < 90){
+                        directionY = -1;
+                    }
+                }
+            }
+            // simulation move
+            int newX,newY, i = 1;
+            while(TRUE){
+                newX = g->dot->x + i*directionX*((angle == 90.0)?0:1);
+                newY = g->dot->y + (int)(i*((angle == 90.0?1:tan(angle)))*directionY);
+                if(inDotArea(g,newX,newY)){
+                    QueueEnqueue(g->dot->nxtX,newX);
+                    QueueEnqueue(g->dot->nxtY,newY);
+                }else{
+                    break;
+                }
+                i++;
+            }
+        }
+        if(QueueIsEmpty(g->dot->nxtY) || QueueIsEmpty(g->dot->nxtX)){
+            pthread_mutex_unlock(&mutex);
+            sleep(100);
+            break;
         }
         g->dot->x = QueueDequeue(g->dot->nxtX); 
         g->dot->y = QueueDequeue(g->dot->nxtY);
@@ -59,7 +113,6 @@ void* BallMover(void* game){
         // REFRESH
         pthread_mutex_unlock(&mutex);
         sleep(100);
-
     }
     return NULL;
 }
@@ -77,3 +130,30 @@ int inDotArea(Game* g, int x, int y){
         return FALSE;
     }
 }
+            // if(g->dot->x == g->WinX/2){
+            //     if(g->dot->y == g->dash->y - 1){
+            //         direction = -1;
+            //     }else {
+            //         direction = 1;
+            //     }
+            //     while(TRUE){
+            //        int newX, newY;
+            //        if(QueueIsEmpty(g->dot->nxtX)){
+            //             newX = g->dot->x;
+            //        }else{
+            //             newX = QueueRear(g->dot->nxtX);
+            //        }
+            //        if(QueueIsEmpty(g->dot->nxtY)){
+            //             newY = g->dot->y;
+            //        }else{
+            //             newY = QueueRear(g->dot->nxtY) + direction;
+            //        }
+            //        if(inDotArea(g,newX,newY)){
+            //             QueueEnqueue(g->dot->nxtX,newX);
+            //             QueueEnqueue(g->dot->nxtY,newY);
+            //        }else{
+            //             break;
+            //        }
+            //     }
+                
+            // }

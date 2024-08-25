@@ -3,6 +3,7 @@
 #include<stdarg.h>
 #include<string.h>
 #include<pthread.h>
+#include<math.h>
 
 #define INITIAL_CAPACITY 100
 #define INCREMENT 20

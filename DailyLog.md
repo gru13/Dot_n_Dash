@@ -35,7 +35,7 @@ Day 2:
     time     : 1hr31m -> (1605 - 1658)(1815 - 1843)(210824)  
     Aim      : Try to move the ball  
     Done     : YES
-    NewLearn : mutex lock and unlock positon   
+    NewLearn : mutex lock and unlock positon  
     Note     :  leaves out trail
     Record   :  
 
@@ -44,5 +44,21 @@ Day 2.1:
     Aim      : remove the trail
     Done     : Yes
     Newlearn : look the mutex locking , refersh thread
-    Note     : BEawre when using mutexlock 
+    Note     : BEawre when using mutexlock
     Record   : New thread intro for controlling the refersh
+
+Day 3:
+    time     : 1hr (2133 - 2243)(250824)
+    Aim      : Move ball up and down
+    Done     : Yes
+    Newlearn : -
+    Note     : -  
+    Record   : -
+
+Day 3.1:
+    time     :  (2245 - 0055)(250824)
+    Aim      : Bouncing the ball around the screen
+    Done     : no
+    Newlearn : -
+    Note     : vanishing in side an dends the program 
+    Record   : -
