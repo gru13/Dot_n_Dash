@@ -3,6 +3,7 @@
 Game* initGame(){
     char CharBuffer[101];
     Game* g = (Game*)malloc(sizeof(Game));
+    g->gameState = WAIT_TO_START;
     mutex = PTHREAD_MUTEX_INITIALIZER;
     initDisplay(g);
     pthread_create(&g->refresh_Thread,NULL,refreshThread,(void*)g);

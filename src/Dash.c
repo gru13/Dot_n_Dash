@@ -7,10 +7,9 @@ int initDash(Game* g){
     g->dash->Size = 20;
     int y = g->dash->y;
     int x = g->dash->x;
-    for(int i = x-10; i < x+10 ;i++){
+    for(int i = x-10; i <= x+10 ;i++){
         pprint(y,i,DASH);
     }
-
     pthread_create(&g->DashMover_thread, NULL, DashMover, (void*)g);
 
     return OK;
@@ -19,37 +18,51 @@ int initDash(Game* g){
 
 void* DashMover(void* game){
     Game* g = (Game*)game;
-    while(TRUE){
+    while(g->gameState != CLOSE){
         choice = wgetch(g->win);
         pthread_mutex_lock(&mutex);
-        pprint(0,0,CONT);
+        // pprint(0,0,CONT);
         switch (choice){
             case ERR:
                 goto ContNextLoopDashMover;
                 break;
+            case KEY_UP:
+                g->gameState = IN_GAME;
+                pthread_create(&g->BallMover_thread, NULL, BallMover, (void*)g);
+                break;
             case KEY_LEFT:
-                pprint(0,0,MV_LFT);
+                // pprint(0,0,MV_LFT);
                 if(g->dash->x - g->dash->Size/2 >= 2){
+                    if(g->gameState == WAIT_TO_START){
+                        pprint(g->dot->y,g->dot->x,SPC);
+                        g->dot->x--;
+                        pprint(g->dot->y,g->dot->x,DOT);
+                    }
                     pprint(g->dash->y,g->dash->x + g->dash->Size/2,SPC);
                     g->dash->x--;
                     pprint(g->dash->y,g->dash->x - g->dash->Size/2,DASH);
                 }
                 break;
             case KEY_RIGHT:
-                pprint(0,0,MV_RYT);
+                // pprint(0,0,MV_RYT);
                 if(g->dash->x + g->dash->Size/2 < g->WinX-2){
+                    if(g->gameState == WAIT_TO_START){
+                        pprint(g->dot->y,g->dot->x,SPC);
+                        g->dot->x++;
+                        pprint(g->dot->y,g->dot->x,DOT);
+                    }
                     pprint(g->dash->y,g->dash->x - g->dash->Size/2,SPC);
                     g->dash->x++;
                     pprint(g->dash->y,g->dash->x + g->dash->Size/2,DASH);
                 }
                 break;
             case ESC:
-                pprint(0,0,CLOSE);
+                // pprint(0,0,CLOSE);
+                g->gameState = CLOSE;
                 pthread_mutex_unlock(&mutex);
                 goto endLOOPDashMover;
                 break;
             default:
-                pprint(0,0,CONT);
                 break;
         }
         ContNextLoopDashMover:

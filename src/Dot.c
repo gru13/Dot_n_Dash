@@ -1,4 +1,4 @@
-#include<./Inbulit_types.h>
+#include "./Inbulit_types.h"
 
 int directionX = -1;
 int directionY = -1;
@@ -20,9 +20,10 @@ int initDot(Game* g){
 
 void* BallMover(void* game){
     Game* g = (Game*)game; 
-    while(TRUE){
+    while(g->gameState == IN_GAME){
         if((g->dot->y == 0 || g->dot->y == g->dash->y-1) && (g->dot->x > g->dash->x + g->dash->Size/2 || 
             g->dot->x < g->dash->x - g->dash->Size/2)){
+            g->gameState = CLOSE;
             break;
         }
         pthread_mutex_lock(&mutex);
@@ -30,16 +31,23 @@ void* BallMover(void* game){
         if(QueueIsEmpty(g->dot->nxtY) || QueueIsEmpty(g->dot->nxtX)){
             // if the ball in last layer above the dash layer
             if(g->dot->y == g->dash->y - 1){
+                printf("Down ");
                 directionY = -1;
                 if(g->dot->x == g->dash->x){
                     angle = 90.0; 
                 }else{
                     int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
                     angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / PI
-                    if(angle*180/PI > 90){
+                    if(g->dot->x < g->dash->x){
+                        
                         directionX = -1;
-                    }else if(angle*180/PI < 90){
-                        directionX = +1;
+                        angle -= 3.14159;
+                    }else if(g->dot->x > g->dash->x){
+                        printf("");
+                        directionX = 1;
+                    }else if(g->dot->x == g->dash->x){
+                        printf("");
+                        directionX = 0;
                     }
                 }
             }
@@ -48,13 +56,17 @@ void* BallMover(void* game){
                 directionY = 1;
                 if(g->dot->x == g->WinX/2){
                     angle = 90.0; 
+                    directionX = 0;
                 }else{
                     int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
                     angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / M_PI
-                    if(angle*180/PI > 90){
-                        directionX = +1;
-                    }else if(angle*180/PI < 90){
+                    if(g->dot->x < g->WinX/2){
+                        printf("up\n");
                         directionX = -1;
+                        angle -= 3.14159;
+                    }else if(g->dot->x > g->WinX/2){
+                        printf("Down\n");
+                        directionX = 1;
                     }
                 }
             }
@@ -62,14 +74,19 @@ void* BallMover(void* game){
             else if(g->dot->x == 1){
                 directionX = 1;
                 if(g->dot->y == g->WinY/2){
-                    angle = 90.0; 
+                    angle = 90.0;
+                    directionY = 0;
                 }else{
+                    printf("LEFT : ");
                     int x = (g->dash->x + g->dash->Size/2) - g->dot->x; // ../refresh math-motion-dot.png
                     angle = atan((double)x/(double)g->dash->Size) ; // multiply this to get in angle  ->  * 180 / M_PI
-                    if(angle*180/PI > 90){
-                        directionY= +1;
-                    }else if(angle*180/PI < 90){
-                        directionY = -1;
+                    if(g->dot->y < g->WinY/2){
+                        printf("above\n");
+                        directionY = +1;
+                        // angle -= 3.14159;
+                    }else if(g->dot->y > g->WinY/2){
+                        printf("below\n");
+                        directionX = -1;
                     }
                 }
             }
@@ -89,6 +106,7 @@ void* BallMover(void* game){
                 }
             }
             // simulation move
+            printf("%lf , x => %d, y = %d\n",(angle == 90)?90:angle*180/PI, directionX,      directionY);
             int newX,newY, i = 1;
             while(TRUE){
                 newX = g->dot->x + i*directionX*((angle == 90.0)?0:1);

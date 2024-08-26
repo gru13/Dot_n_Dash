@@ -40,6 +40,10 @@ extern char CharBuffer[INITIAL_CAPACITY];
 #define ESC 27
 #define OK 0
 #define ERRO 1
+#define WAIT_TO_START 'w'
+#define IN_GAME 'g'
+
+
 
 #ifdef __linux__
     #define CLEARSCRN "clear"
@@ -97,6 +101,7 @@ typedef struct Game{
     pthread_t refresh_Thread;
     Dash* dash;
     Dot* dot;
+    int gameState;
     unsigned short WinY; // max heigth of current Display
     unsigned short WinX; // max width of current Display
 } Game;
