@@ -11,7 +11,7 @@ include_directories(${PDCURSES_INCLUDE_DIR})
 link_directories(${PDCURSES_LIB_DIR})
 
 # Add the executable
-add_executable(Dash_n_Dot src/main.c src/Dot.c src/Dash.c src/Game.c src/dataStructures.c)
+add_executable(Dash_n_Dot src/main.c src/Dot.c src/Dash.c src/Game.c)
 
 # Find and link pthread
 # find_package(Threads REQUIRED)

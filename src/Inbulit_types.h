@@ -10,7 +10,8 @@
 extern char CharBuffer[INITIAL_CAPACITY];
 // #define REFRESH_RATE 4000 // this in milli-second
 #define SPC " "
-#define DOT "■"
+// #define DOT "■"
+#define DOT "⬤"
 #define DASH "█"
 #define VER_LINE "║"
 #define HOR_LINE "═"
@@ -51,20 +52,7 @@ extern char CharBuffer[INITIAL_CAPACITY];
 pthread_mutex_t mutex;
 int choice;
 
-// #define REFRESH wrefresh(g->win);
 
-typedef struct {
-    int *items;
-    int top;
-    int capacity;
-} Stack;
-typedef struct {
-    int *items;
-    int front;
-    int rear;
-    int size;
-    int capacity;
-} Queue;
 
 
 typedef struct Dash_Struct{
@@ -78,9 +66,8 @@ typedef struct Dot_Struct{
     int y;
     int directionX;
     int directionY;
-    int angle;
-    // Queue* nxtX;
-    // Queue* nxtY;
+    float angle;
+    int speed;
 } Dot;
 
 typedef struct Game{
@@ -130,25 +117,3 @@ int inDotArea(Game* g, int x, int y);
         Stack
         Queue
 */
-
-// Stack part
-void StackInit(Stack *s);
-int StackisFull(Stack *s);
-int StackisEmpty(Stack *s);
-void StackResize(Stack *s, int new_capacity);
-void StackPush(Stack *s, int value);
-int StackPop(Stack *s);
-int StactPeek(Stack *s);
-void Stackfree(Stack *s);
-void StackPrint(Stack *s);
-// Queue part
-void QueueInit(Queue *q);
-int QueueIsFull(Queue *q);
-int QueueIsEmpty(Queue *q);
-void QueueResize(Queue *q, int new_capacity);
-void QueueEnqueue(Queue *q, int value);
-int QueueDequeue(Queue *q);
-int QueueFront(Queue *q);
-int QueueRear(Queue *q);
-void QueueFree(Queue *q);
-void QueuePrint(Queue *q);
