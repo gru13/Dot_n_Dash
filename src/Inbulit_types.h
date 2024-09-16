@@ -9,24 +9,15 @@
 #define INCREMENT 20
 extern char CharBuffer[INITIAL_CAPACITY];
 // #define REFRESH_RATE 4000 // this in milli-second
-#define SPC 32	 // ' '
-#define DASH 35 // #
-#define DOT 79	 // O
-#define VER_LINE (int)'|' // ║
-#define HOR_LINE (int)'-' // ═
-
-// #define DASH 219 // █
-// #define BALL 254	 // ■
-// #define DOT 254	 // ■
-// #define DASH  220 // ▄
-
-// #define BLOK 219 // █
-// #define VER_LINE 186 // ║
-// #define HOR_LINE 205 // ═
-// #define TL_COR 201	 // ╔
-// #define BL_COR 200	 // ╚
-// #define TR_COR 187	 // ╗
-// #define BR_COR 188	 // ╝
+#define SPC " "
+#define DOT "■"
+#define DASH "█"
+#define VER_LINE "║"
+#define HOR_LINE "═"
+#define TL_COR  "╔"
+#define BL_COR  "╚"
+#define TR_COR  "╗"
+#define BR_COR  "╝"
 
 
 #define PI 3.14159265358979323846
@@ -60,12 +51,7 @@ extern char CharBuffer[INITIAL_CAPACITY];
 pthread_mutex_t mutex;
 int choice;
 
-#define REFRESH wrefresh(g->win);
-
-#define print(str) \
-    wprintw((WINDOW*)g->win,"%c",(char)str);
-#define pprint(y,x, str) \
-    mvwprintw(g->win, (int)y, (int)x, "%c", (char)(str))
+// #define REFRESH wrefresh(g->win);
 
 typedef struct {
     int *items;
@@ -90,8 +76,11 @@ typedef struct Dash_Struct{
 typedef struct Dot_Struct{
     int x;
     int y;
-    Queue* nxtX;
-    Queue* nxtY;
+    int directionX;
+    int directionY;
+    int angle;
+    // Queue* nxtX;
+    // Queue* nxtY;
 } Dot;
 
 typedef struct Game{
@@ -107,18 +96,18 @@ typedef struct Game{
 } Game;
 
 /*
-        Game.c 
+        Game.c
 overall game function
-contains 
+contains
     init of game
-    dealing with board and sync of dash and dots 
+    dealing with board and sync of dash and dots
 */
 Game* initGame();
 int initDisplay(Game* g);
 void* refreshThread(void* game);
 
 /*
-        Dash.c 
+        Dash.c
 
 */
 int initDash(Game* g);
@@ -127,14 +116,14 @@ void* DashMover(void* game);
 
 
 /*
-        Dot.    
+        Dot.
 */
 int initDot(Game* g);
 void* BallMover(void* game);
 int inDotArea(Game* g, int x, int y);
 
 
-/*  
+/*
     dataStructures.c
 
     Data Structures:
@@ -143,15 +132,15 @@ int inDotArea(Game* g, int x, int y);
 */
 
 // Stack part
-void StackInit(Stack *s); 
-int StackisFull(Stack *s); 
-int StackisEmpty(Stack *s); 
-void StackResize(Stack *s, int new_capacity); 
-void StackPush(Stack *s, int value); 
-int StackPop(Stack *s); 
-int StactPeek(Stack *s); 
-void Stackfree(Stack *s); 
-void StackPrint(Stack *s); 
+void StackInit(Stack *s);
+int StackisFull(Stack *s);
+int StackisEmpty(Stack *s);
+void StackResize(Stack *s, int new_capacity);
+void StackPush(Stack *s, int value);
+int StackPop(Stack *s);
+int StactPeek(Stack *s);
+void Stackfree(Stack *s);
+void StackPrint(Stack *s);
 // Queue part
 void QueueInit(Queue *q);
 int QueueIsFull(Queue *q);

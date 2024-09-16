@@ -8,7 +8,7 @@ int initDash(Game* g){
     int y = g->dash->y;
     int x = g->dash->x;
     for(int i = x-10; i <= x+10 ;i++){
-        pprint(y,i,DASH);
+        mvwprintw(g->win,y,i,"%s",DASH);
     }
     pthread_create(&g->DashMover_thread, NULL, DashMover, (void*)g);
 
@@ -21,7 +21,7 @@ void* DashMover(void* game){
     while(g->gameState != CLOSE){
         choice = wgetch(g->win);
         pthread_mutex_lock(&mutex);
-        // pprint(0,0,CONT);
+        // mvwprintw(g->win,0,0,"%s",CONT);
         switch (choice){
             case ERR:
                 goto ContNextLoopDashMover;
@@ -31,33 +31,33 @@ void* DashMover(void* game){
                 pthread_create(&g->BallMover_thread, NULL, BallMover, (void*)g);
                 break;
             case KEY_LEFT:
-                // pprint(0,0,MV_LFT);
+                // mvwprintw(g->win,0,0,"%s",MV_LFT);
                 if(g->dash->x - g->dash->Size/2 >= 2){
                     if(g->gameState == WAIT_TO_START){
-                        pprint(g->dot->y,g->dot->x,SPC);
+                        mvwprintw(g->win,g->dot->y,g->dot->x,"%s",SPC);
                         g->dot->x--;
-                        pprint(g->dot->y,g->dot->x,DOT);
+                        mvwprintw(g->win,g->dot->y,g->dot->x,"%s",DOT);
                     }
-                    pprint(g->dash->y,g->dash->x + g->dash->Size/2,SPC);
+                    mvwprintw(g->win,g->dash->y,g->dash->x + g->dash->Size/2,"%s",SPC);
                     g->dash->x--;
-                    pprint(g->dash->y,g->dash->x - g->dash->Size/2,DASH);
+                    mvwprintw(g->win,g->dash->y,g->dash->x - g->dash->Size/2,"%s",DASH);
                 }
                 break;
             case KEY_RIGHT:
-                // pprint(0,0,MV_RYT);
+                // mvwprintw(g->win,0,0,"%s",MV_RYT);
                 if(g->dash->x + g->dash->Size/2 < g->WinX-2){
                     if(g->gameState == WAIT_TO_START){
-                        pprint(g->dot->y,g->dot->x,SPC);
+                        mvwprintw(g->win,g->dot->y,g->dot->x,"%s",SPC);
                         g->dot->x++;
-                        pprint(g->dot->y,g->dot->x,DOT);
+                        mvwprintw(g->win,g->dot->y,g->dot->x,"%s",DOT);
                     }
-                    pprint(g->dash->y,g->dash->x - g->dash->Size/2,SPC);
+                    mvwprintw(g->win,g->dash->y,g->dash->x - g->dash->Size/2,"%s",SPC);
                     g->dash->x++;
-                    pprint(g->dash->y,g->dash->x + g->dash->Size/2,DASH);
+                    mvwprintw(g->win,g->dash->y,g->dash->x + g->dash->Size/2,"%s",DASH);
                 }
                 break;
             case ESC:
-                // pprint(0,0,CLOSE);
+                // mvwprintw(g->win,0,0,"%s",CLOSE);
                 g->gameState = CLOSE;
                 pthread_mutex_unlock(&mutex);
                 goto endLOOPDashMover;
@@ -66,11 +66,7 @@ void* DashMover(void* game){
                 break;
         }
         ContNextLoopDashMover:
-            // REFRESH;
             pthread_mutex_unlock(&mutex);
-            // sleep(1);    
-            // sleep(200);
-
     }
     endLOOPDashMover:
     return NULL;

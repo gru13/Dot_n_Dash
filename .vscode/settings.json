@@ -9,6 +9,7 @@
         "windows.h": "c",
         "curses.h": "c",
         "ncurses.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "pdcwin.h": "c"
     }
 }

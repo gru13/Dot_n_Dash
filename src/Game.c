@@ -23,13 +23,17 @@ int initDisplay(Game* g){
     g->WinY = getmaxy(g->win);
     // wborder(g->win,VER_LINE,VER_LINE,HOR_LINE,HOR_LINE,TL_COR,TR_COR,BL_COR,BR_COR);
     for(int i = 0; i < g->WinX; i++){  
-        pprint(g->WinY-1,i,HOR_LINE);
-        pprint(0,i,HOR_LINE);
+        mvwprintw(g->win,g->WinY-1,i,"%s",HOR_LINE);
+        mvwprintw(g->win,0,i,"%s",HOR_LINE);
     }
     for(int i = 0; i < g->WinY; i++){
-        pprint(i,g->WinX-1,VER_LINE);
-        pprint(i,0,VER_LINE);
+        mvwprintw(g->win,i,g->WinX-1,"%s",VER_LINE);
+        mvwprintw(g->win,i,0,"%s",VER_LINE);
     }
+    mvwprintw(g->win,0,0,"%s",TL_COR);
+    mvwprintw(g->win,0,g->WinX-1,"%s",TR_COR);
+    mvwprintw(g->win,g->WinY-1,0,"%s",BL_COR);
+    mvwprintw(g->win,g->WinY-1,g->WinX-1,"%s",BR_COR);
     return OK;
 }
 
@@ -37,7 +41,7 @@ void* refreshThread(void* game){
     Game* g = (Game*)game;
     while(TRUE){
         pthread_mutex_lock(&mutex);
-        REFRESH;
+        wrefresh(g->win);
         pthread_mutex_unlock(&mutex);
         sleep(200);
     }
